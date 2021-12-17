@@ -19,10 +19,12 @@
   },
   "dependencies": {
     "@cashfreepayments/cashfree-sdk": "^0.1.7",
+    "cashfree-sdk": "^0.1.1",
     "express": "^4.17.1",
     "express-validator": "^6.14.0",
     "firebase": "^9.6.1",
     "mongoose": "^6.1.0",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "path": "^0.12.7"
   }
 }
