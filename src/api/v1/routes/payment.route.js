@@ -8,7 +8,8 @@ router.get('/beneficiary/get/:beneId' , validateBeneficiary('getBeneficiaryDetai
 router.post('/beneficiary/add' , validateBeneficiary('addBeneficiary') , beneficiaryController.addBeneficiary)
 //----------transfer--------------------------------------------------------------
 const transferController = require('../controllers/payment/transfer.controller');
-router.post('/transfer/direct' , validateTransfer('transfer'),transferController.transfer);
+router.get('/transfer/details/:referenceId' , validateTransfer('getTransferDetails'),transferController.getTransferDetails);
+router.post('/transfer/pay' , validateTransfer('transfer'),transferController.transfer);
 
 
 

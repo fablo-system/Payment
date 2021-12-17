@@ -74,20 +74,66 @@ async function fetchBeneficiaryDetails(beneficiaryData) {
 }
 
 //----------transfer--------------------------------------------------------------
-async function transfer() {
+async function transfer(transferData) {
   try {
     var res = await Payouts.Transfers.RequestTransfer({
-      beneId: 'ashu9575513319',
-      amount: '1.00',
-      transferId: 'DEC20212',
+      beneId: transferData.beneId,
+      amount: transferData.amount,
+      transferId: transferData.transferId,
     });
-    return res;
+    if (res.status == "SUCCESS") {
+      return {
+        status: true,
+        message: res.message,
+        data: res.data
+      }
+    } else if (res.status == "PENDING") {
+      return {
+        status: "pending",
+        message: res.message,
+        data: {}
+      }
+    } else {
+      return {
+        status: false,
+        message: res.message,
+        data: {}
+      }
+    }
   } catch (error) {
-    console.log("error" + error);
-    return error;
+    return {
+      status: false,
+      message: "Something Went Wrong",
+      data: error
+    }
   }
-
 }
+
+async function getTransferDetails(transferData) {
+  try {
+    const res = await Payouts.Transfers.GetTransferStatus({ referenceId: transferData.referenceId });
+    if (res.status == "SUCCESS") {
+      return {
+        status: true,
+        message: res.message,
+        data: res.data.transfer
+      }
+    } else {
+      return {
+        status: false,
+        message: res.message,
+        data: {}
+      }
+    }
+  } catch (error) {
+    return {
+      status: false,
+      message: "Something Went Wrong",
+      data: error
+    }
+  }
+}
+
 
 //--------------------------------------------------------------------------------
 module.exports = {
@@ -95,5 +141,6 @@ module.exports = {
   createBeneficiary,
   fetchBeneficiaryDetails,
   //--------------------
-  transfer
+  transfer,
+  getTransferDetails
 }

@@ -9,6 +9,11 @@ exports.validateTransfer = (method) => {
         body('transferId', 'Transfer id is Required').not().isEmpty().trim().escape()
       ]
     }
+    case 'getTransferDetails': {
+      return [
+        param('referenceId' , 'Reference Id is Required').not().isEmpty().trim().escape()
+      ]
+    }
   }
 }
 

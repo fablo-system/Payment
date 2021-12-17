@@ -94,32 +94,35 @@ async function unknownError(res, error) {
     if (error instanceof mongoose.Error) {
         if (error.name == "ValidationError") {
             const errormessage = await this.validation(error.message);
-            res.status(400);
-            res.json({
-                status: false,
-                message: MESSAGE_ALL_REQUIRED,
-                error: 'ValidationError',
-                items: errormessage
-            });
+            sendResponse(res, 400, false, 'All Fields Required', 'ValidationError', errormessage);
+            // res.status(400);
+            // res.status(400);
+            // res.json({
+            //     status: false,
+            //     message: MESSAGE_ALL_REQUIRED,
+            //     error: 'ValidationError',
+            //     items: errormessage
+            // });
         } else if (error.name == "CastError") {
-            res.status(400);
-            console.log(error.valueType);
-            res.json({
-                status: false,
-                message: 'Invalid Data',
-                error: 'CastError',
-                items: {
-                    "data": `Need ${error.kind} but getting ${error.valueType}`
-                }
-            });
+            sendResponse(res, 400, false, 'Invalid Data', 'CastError', { "data": `Need ${error.kind} but getting ${error.valueType}` });
+            // res.status(400);
+            // res.json({
+            //     status: false,
+            //     message: 'Invalid Data',
+            //     error: 'CastError',
+            //     items: {
+            //         "data": `Need ${error.kind} but getting ${error.valueType}`
+            //     }
+            // });
         } else {
-            res.status(400);
-            res.json({
-                status: false,
-                message: 'Something Went Wrong',
-                error: 'Unknown',
-                items: error
-            });
+            sendResponse(res, 400, false, 'Something Went Wrong', 'Unknown', error);
+            // res.status(400);
+            // res.json({
+            //     status: false,
+            //     message: 'Something Went Wrong',
+            //     error: 'Unknown',
+            //     items: error
+            // });
         }
     } else if (error.name === "MongoError" && error.code === 11000) {
         const errormessage = await this.alreadyExist(error.keyValue)
@@ -167,9 +170,10 @@ async function alreadyExist(e) {
 //====================================================================================================
 
 async function sendResponse(res, statusCode, status, message, error, items) {
-    res.status(statusCode);
+    res.status(200);
     res.json({
         status: status,
+        subCode:statusCode,
         message: message,
         error: error,
         items: items
