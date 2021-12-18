@@ -11,12 +11,13 @@ module.exports = {
             } else {
                 const result = await createBeneficiary(req.body);
                 if (result.status == true) {
-                    success(res, result.message, beneficiaryDetails)
+                    success(res, result.message, result)
                 } else {
                     badRequest(res, result.message)
                 }
             }
         } catch (error) {
+            console.log(error);
             unknownError(res, error)
         }
     },
